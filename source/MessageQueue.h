@@ -29,9 +29,10 @@ struct message
     message_params params;
 };
 
-struct message_queue
+class MessageQueue
 {
-    message_queue(int max_messages) :
+public:
+    MessageQueue(int max_messages) :
         messages_(nullptr), max_messages_(max_messages),
         num_messages_(0), head_(0), tail_(0)
     {
@@ -39,7 +40,7 @@ struct message_queue
         messages_ = (message *)malloc(alloc_size);
     }
 
-    ~message_queue() { free(messages_); }
+    ~MessageQueue() { free(messages_); }
 
     bool push(const message& msg)
     {
@@ -66,6 +67,7 @@ struct message_queue
         return false;
     }
 
+private:
     message* messages_;
     int max_messages_;
     int head_;

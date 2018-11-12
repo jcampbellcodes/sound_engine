@@ -3,30 +3,39 @@
 
 #include <semaphore.h>
 
-struct update_event
+// wrapper for a semaphore
+class Semaphore
 {
-    update_event()
+public:
+    virtual void signal() = 0;
+    virtual void wait() = 0;
+};
+
+class LinuxSemaphore : public Semaphore
+{
+public:
+    LinuxSemaphore()
     {
         sem_init(&semaphore, 0, 0);
     }
 
-    ~update_event()
+    virtual ~LinuxSemaphore()
     {
         sem_destroy(&semaphore);
     }
 
-    void signal()
+    void signal() override
     {
         sem_post(&semaphore);
     }
 
-    void wait()
+    void wait() override
     {
         sem_wait(&semaphore);
     }
 
+private:
     sem_t semaphore;
-
 };
 
 #endif
